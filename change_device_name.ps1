@@ -1,14 +1,18 @@
-$name = New-Object PSObject -Property @{
-    type          = "NB"
-    Room          = 211
-    counterstring = Get-Content C:\_repos\Arbeit\Change_Device_Name\counter.txt
-    #   counterint    = [int]$name.counterstring
+$type = 'GS'
+$name = 'Test'
+$counter = Get-Content C:\_repos\Arbeit\Change_Device_Name\counter.txt
+
+$i = [System.Decimal]::Parse($counter)
+$i++
+if ($i -lt 10) {
+    $formatted = '{0:d2}' -f [int]$i
+    Set-Content C:\_repos\Arbeit\Change_Device_Name\counter.txt $formatted
+    $device_name = "$type-$name-$formatted"
 }
-Write-Host $name.counterstring
-#$name.counterint = $name.counterint + 1
-#Set-Content C:\Users\Admin\Desktop\counter.txt $name.counterint
-if ($name.counterstring -lt 10) {
-    $sugma = "", $name.counterstring
-    $sugma -join "0"
-    Set-Content C:\_repos\Arbeit\Change_Device_Name\counter.txt $sugma -join "0"
+else {
+    Set-Content C:\_repos\Arbeit\Change_Device_Name\counter.txt $i
+    Write-Host $i
+    $device_name = "$type-$name-$i"
 }
+Write-Host $device_name
+Rename-Computer -NewName $device_name -Force
